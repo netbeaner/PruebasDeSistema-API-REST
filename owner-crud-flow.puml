@@ -1,0 +1,55 @@
+@startuml Owner CRUD Flow Test
+
+title Flujo de prueba CRUD - Owner Entity
+
+actor Cliente as client
+participant "PetClinic API" as api
+database "Database" as db
+
+== 1. Buscar Owner (No existe) ==
+client -> api : GET /api/owners/11
+api -> db : findOwnerById(11)
+db --> api : null
+api --> client : 404 Not Found
+
+== 2. Crear Owner ==
+client -> api : POST /api/owners\n{"firstName":"Pedro","lastName":"Paramo",\n"address":"123 Main St","city":"Springfield",\n"telephone":"5576954655"}
+api -> db : saveOwner(owner)
+db --> api : owner (id=11)
+api --> client : 201 Created\n{id:11, firstName:"Pedro", lastName:"Paramo",\naddress:"123 Main St", city:"Springfield",\ntelephone:"5576954655"}
+
+== 3. Buscar Owner (Existe) ==
+client -> api : GET /api/owners/11
+api -> db : findOwnerById(11)
+db --> api : owner
+api --> client : 200 OK\n{id:11, firstName:"Pedro", lastName:"Paramo",\naddress:"123 Main St", city:"Springfield",\ntelephone:"5576954655"}
+
+== 4. Editar Owner (Cambiar address y city) ==
+client -> api : PUT /api/owners/11\n{"firstName":"Pedro","lastName":"Paramo",\n"address":"Cerro del petacal #358",\n"city":"Shelbyville","telephone":"5576954655"}
+api -> db : findOwnerById(11)
+db --> api : owner
+api -> db : saveOwner(updatedOwner)
+db --> api : ok
+api --> client : 204 No Content
+
+== 5. Buscar Owner (Modificado) ==
+client -> api : GET /api/owners/11
+api -> db : findOwnerById(11)
+db --> api : owner
+api --> client : 200 OK\n{id:11, firstName:"Pedro", lastName:"Paramo",\naddress:"Cerro del petacal #358", city:"Shelbyville",\ntelephone:"5576954655"}
+
+== 6. Eliminar Owner ==
+client -> api : DELETE /api/owners/11
+api -> db : findOwnerById(11)
+db --> api : owner
+api -> db : deleteOwner(owner)
+db --> api : ok
+api --> client : 204 No Content
+
+== 7. Buscar Owner (No existe nuevamente) ==
+client -> api : GET /api/owners/11
+api -> db : findOwnerById(11)
+db --> api : null
+api --> client : 404 Not Found
+
+@enduml
