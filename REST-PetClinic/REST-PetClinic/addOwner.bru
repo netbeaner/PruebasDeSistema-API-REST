@@ -1,0 +1,49 @@
+meta {
+  name: addOwner
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:9966/petclinic/api/owners
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+body:json {
+  {
+    "firstName": "Pedro",
+    "lastName": "Paramo",
+    "address": "123 Main St",
+    "city": "Springfield",
+    "telephone": "5576954655"
+  }
+}
+
+tests {
+  test("Should return 201 Created", function() {
+    expect(res.status).to.equal(201);
+  });
+  
+  test("Should return owner with id", function() {
+    expect(res.body.id).to.be.a("number");
+  });
+  
+  test("Should return correct owner data", function() {
+    expect(res.body.firstName).to.equal("Pedro");
+    expect(res.body.lastName).to.equal("Paramo");
+    expect(res.body.address).to.equal("123 Main St");
+    expect(res.body.city).to.equal("Springfield");
+    expect(res.body.telephone).to.equal("5576954655");
+  });
+  
+}
+
+settings {
+  encodeUrl: false
+}

@@ -1,0 +1,30 @@
+meta {
+  name: getOwner-new-search updated
+  type: http
+  seq: 6
+}
+
+get {
+  url: http://localhost:9966/petclinic/api/owners/11
+  body: none
+  auth: inherit
+}
+
+headers {
+  Accept: application/json
+}
+
+tests {
+  test("Should return 204 No Content", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("Should return updated city", function() {
+    expect(res.body.city).to.equal("Shelbyville");
+  });
+  
+}
+
+settings {
+  encodeUrl: false
+}

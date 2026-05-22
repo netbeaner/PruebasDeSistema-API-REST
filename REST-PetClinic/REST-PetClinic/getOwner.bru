@@ -1,0 +1,26 @@
+meta {
+  name: getOwner
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:9966/petclinic/api/owners/11
+  body: none
+  auth: inherit
+}
+
+headers {
+  Accept: application/json
+}
+
+tests {
+  test("Should return 404 Not Found", function() {
+    expect(res.status).to.equal(404);
+  });
+  
+}
+
+settings {
+  encodeUrl: false
+}
